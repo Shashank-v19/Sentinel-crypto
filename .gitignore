@@ -42,3 +42,7 @@ Thumbs.db
 # ── Logs ─────────────────────────────────────────────────────────────────────
 *.log
 logs/
+
+# ── ML Models ────────────────────────────────────────────────────────────────
+# Keep only the lightweight TFLite model; exclude the heavy Keras .h5
+models/autoencoder.h5
