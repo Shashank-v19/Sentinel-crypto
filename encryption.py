@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 from chaos import logistic_map
 import hashlib
 
