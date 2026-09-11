@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Sender | Chaos + Deep Learning Encryption</title>
+  <meta name="description"
+    content="Encrypt images using a hybrid Logistic Map chaos sequence combined with deep learning feature extraction.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <!-- ── VIDEO BACKGROUND ────────────────────────────────────────────── -->
+  <div class="bg-fallback"></div>
+  <div class="bg-video-wrap">
+    <video autoplay muted loop playsinline>
+      <source src="{{ url_for('static', filename='video/bg_loop.mp4') }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="bg-overlay"></div>
+
+  <!-- ── NAV ────────────────────────────────────────────────────────── -->
+  <nav class="nav">
+    <a href="/" class="brand">
+      <div class="brand-icon">🔐</div>
+      Sentinel<span class="brand-accent">Crypto</span>
+    </a>
+    <div class="nav-links">
+      <a href="/" class="active" id="nav-sender">Sender Portal</a>
+      <a href="/receiver" id="nav-receiver">Receiver Portal</a>
+      <span class="nav-badge">Secure</span>
+    </div>
+  </nav>
+
+  <!-- ── MAIN ───────────────────────────────────────────────────────── -->
+  <main class="container">
+
+    <header class="page-header">
+      <div class="page-tag">⚡ Hybrid Encryption Engine</div>
+      <h1>Secure Your <span class="accent">Transmission</span></h1>
+      <p>Upload an image to encrypt it using a dual-layer hybrid of Logistic Map chaos sequences and deep learning
+        feature extraction.</p>
+    </header>
+
+    <div class="main-grid">
+
+      <!-- Card 1 — Upload -->
+      <div class="card full-width" id="uploadCard">
+        <div class="card-header">
+          <div class="card-step">1</div>
+          <div>
+            <h2>Upload Image</h2>
+            <p class="card-subtitle">PNG, JPG, or WEBP supported</p>
+          </div>
+        </div>
+
+        <form id="uploadForm">
+          <input type="file" id="imageInput" accept="image/*" style="display:none">
+          <label for="imageInput" class="upload-zone" id="dropZone">
+            <div class="upload-icon">📁</div>
+            <h3>Drop image here</h3>
+            <p>or click to browse files</p>
+          </label>
+        </form>
+
+        <div class="preview-area hidden" id="previewArea">
+          <div class="preview-img-wrapper">
+            <img id="imagePreview" src="" alt="Image preview">
+          </div>
+          <button class="btn btn-primary btn-full" id="encryptBtn">
+            🔒 Encrypt Image
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 2 — Result -->
+      <div class="card hidden" id="resultCard">
+        <div class="card-header">
+          <div class="card-step">2</div>
+          <div>
+            <h2>Encrypted Result</h2>
+            <p class="card-subtitle">Chaos-encrypted cipher image</p>
+          </div>
+        </div>
+
+        <div class="result-image-wrapper">
+          <img id="encryptedImage" src="" alt="Encrypted output">
+          <div class="result-image-actions">
+            <a id="downloadEncrypted" class="btn btn-icon" href="#" download="encrypted.png" title="Download">⬇</a>
+          </div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <span class="metric-label">Entropy</span>
+            <span class="metric-value" id="valEntropy">--</span>
+            <span class="metric-match" id="matchEntropy"></span>
+            <div class="metric-tooltip">Ideal ≈ 8.0 (max randomness)</div>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">NPCR</span>
+            <span class="metric-value" id="valNpcr">--%</span>
+            <span class="metric-match" id="matchNpcr"></span>
+            <div class="metric-tooltip">Ideal ≈ 99.61%</div>
+          </div>
+          <div class="metric-box">
+            <span class="metric-label">UACI</span>
+            <span class="metric-value" id="valUaci">--%</span>
+            <span class="metric-match" id="matchUaci"></span>
+            <div class="metric-tooltip">Ideal ≈ 33.46%</div>
+          </div>
+        </div>
+
+        <div class="session-block">
+          <div class="session-block-label">🔑 Session Key — share securely</div>
+          <div class="session-key-row">
+            <div class="session-key-value" id="sessionIdDisplay">—</div>
+            <button class="btn btn-outline" id="copySessionBtn" style="flex-shrink:0;">Copy</button>
+          </div>
+          <p class="session-helper">Share this Session ID with the receiver to enable decryption. Do not expose it
+            publicly.</p>
+        </div>
+
+        <div class="terminal-block">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot" style="background:#ef4444"></div>
+              <div class="terminal-dot" style="background:#fde047"></div>
+              <div class="terminal-dot" style="background:#4ade80"></div>
+            </div>
+            <span class="terminal-title">Generated Formula</span>
+          </div>
+          <div class="terminal-body">
+            <span class="t-line"><span class="t-key">X</span><sub>0</sub><span class="t-white"> = </span><span
+                class="t-num" id="formulaX0">—</span></span>
+            <span class="t-line"><span class="t-key">X</span><sub>n+1</sub><span class="t-white"> = </span><span
+                class="t-fn">3.99</span><span class="t-white"> × X</span><sub>n</sub><span class="t-white"> × (1 −
+                X</span><sub>n</sub><span class="t-white">)</span></span>
+            <span class="t-line"><span class="t-key">C</span><span class="t-white"> = P ⊕ (</span><span
+                class="t-val">Chaos_Key</span><span class="t-white"> ⊕ </span><span
+                class="t-fn">CNN_Features</span><span class="t-white">)</span></span>
+            <span class="t-line t-mute"># Logistic Map r=3.99 · Autoencoder Feature XOR Fusion</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 — Technique (full width) -->
+      <div class="card full-width">
+        <div class="card-header">
+          <div class="card-step">⚙</div>
+          <div>
+            <h2>Hybrid Encryption Technique</h2>
+            <p class="card-subtitle">Dual-layer: Deep Learning × Chaos Theory</p>
+          </div>
+        </div>
+        <ul class="info-list">
+          <li>
+            <div class="info-list-icon">🧠</div>
+            <div class="info-list-text">
+              <strong>Layer 1 — Deep Learning Feature Extraction</strong>
+              <span>A Keras Autoencoder processes the image to extract high-level feature maps. These dynamic features
+                form half of the encryption key, making every encryption unique to the image content.</span>
+            </div>
+          </li>
+          <li>
+            <div class="info-list-icon">🌀</div>
+            <div class="info-list-text">
+              <strong>Layer 2 — Logistic Map Chaos Sequence</strong>
+              <span>A Logistic Map sequence (r = 3.99) acts as a pseudorandom number generator to create completely
+                chaotic noise. X₀ is derived from the session ID for non-repeatability.</span>
+            </div>
+          </li>
+          <li>
+            <div class="info-list-icon">⚡</div>
+            <div class="info-list-text">
+              <strong>Fusion — XOR Key Combination</strong>
+              <span>Both keys are XOR'd together to create a non-linear robust final key, ensuring resistance to
+                differential attacks and reverse engineering through either layer alone.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/sender.js') }}"></script>
+</body>
+
+</html>

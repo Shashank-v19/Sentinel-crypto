@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Receiver | Chaos + Deep Learning Decryption</title>
+  <meta name="description"
+    content="Decrypt images encrypted with the hybrid Logistic Map chaos and deep learning encryption system.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+  <!-- ── VIDEO BACKGROUND ────────────────────────────────────────────── -->
+  <div class="bg-fallback"></div>
+  <div class="bg-video-wrap">
+    <video autoplay muted loop playsinline>
+      <source src="{{ url_for('static', filename='video/bg_loop.mp4') }}" type="video/mp4">
+    </video>
+  </div>
+  <div class="bg-overlay"></div>
+
+  <!-- ── NAV ────────────────────────────────────────────────────────── -->
+  <nav class="nav">
+    <a href="/" class="brand">
+      <div class="brand-icon">🔐</div>
+      Sentinel<span class="brand-accent">Crypto</span>
+    </a>
+    <div class="nav-links">
+      <a href="/" id="nav-sender">Sender Portal</a>
+      <a href="/receiver" class="active" id="nav-receiver">Receiver Portal</a>
+      <span class="nav-badge">Secure</span>
+    </div>
+  </nav>
+
+  <!-- ── MAIN ───────────────────────────────────────────────────────── -->
+  <main class="container">
+
+    <header class="page-header">
+      <div class="page-tag">🔓 Decryption Terminal</div>
+      <h1>Decrypt Your <span class="accent">Transmission</span></h1>
+      <p>Enter the session key shared by the sender and upload the encrypted image to recover your original file
+        securely.</p>
+    </header>
+
+    <div class="main-grid">
+
+      <!-- Card 1 — Input -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-step">1</div>
+          <div>
+            <h2>Decryption Data</h2>
+            <p class="card-subtitle">Session key + encrypted image required</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="sessionKey">Session Key</label>
+          <input type="text" id="sessionKey" class="input-field" placeholder="Paste the Session ID from the sender…"
+            autocomplete="off" spellcheck="false">
+        </div>
+
+        <form id="uploadForm">
+          <input type="file" id="imageInput" accept="image/*" style="display:none">
+          <label for="imageInput" class="upload-zone" id="dropZone">
+            <div class="upload-icon">🔒</div>
+            <h3>Upload Encrypted Image</h3>
+            <p>The cipher output from the sender</p>
+          </label>
+        </form>
+
+        <div class="preview-area hidden" id="previewArea">
+          <div class="preview-img-wrapper">
+            <img id="imagePreview" src="" alt="Encrypted image preview">
+          </div>
+          <button class="btn btn-primary btn-full" id="decryptBtn">
+            🔓 Decrypt Image
+          </button>
+          <div id="errorMsg" class="error-msg hidden"></div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Result -->
+      <div class="card hidden" id="resultCard">
+        <div class="card-header">
+          <div class="card-step">2</div>
+          <div>
+            <h2>Decrypted Image</h2>
+            <p class="card-subtitle">Original recovered from cipher</p>
+          </div>
+        </div>
+
+        <div class="result-image-wrapper">
+          <img id="decryptedImage" src="" alt="Decrypted image">
+          <div class="result-image-actions">
+            <a id="downloadDecrypted" class="btn btn-icon" href="#" download="decrypted.png" title="Download">⬇</a>
+          </div>
+        </div>
+
+        <div class="success-alert">
+          ✅ Decryption successful — hybrid Chaos × CNN keys matched
+        </div>
+
+        <div class="terminal-block" style="margin-top:20px;">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <div class="terminal-dot" style="background:#ef4444"></div>
+              <div class="terminal-dot" style="background:#fde047"></div>
+              <div class="terminal-dot" style="background:#4ade80"></div>
+            </div>
+            <span class="terminal-title">Decryption Process Log</span>
+          </div>
+          <div class="terminal-body">
+            <span class="t-line t-mute"># Step 1 — load session key features</span>
+            <span class="t-line"><span class="t-key">features</span><span class="t-white"> = </span><span
+                class="t-fn">np.load</span><span class="t-white">(session_id + </span><span
+                class="t-val">"_features.npy"</span><span class="t-white">)</span></span>
+            <span class="t-line t-mute"># Step 2 — regenerate chaos sequence</span>
+            <span class="t-line"><span class="t-key">chaos_key</span><span class="t-white"> = </span><span
+                class="t-fn">logistic_map</span><span class="t-white">(X0, r=</span><span class="t-num">3.99</span><span
+                class="t-white">)</span></span>
+            <span class="t-line t-mute"># Step 3 — XOR fusion &amp; reconstruct</span>
+            <span class="t-line"><span class="t-key">P</span><span class="t-white"> = C XOR (</span><span
+                class="t-val">chaos_key</span><span class="t-white"> XOR </span><span
+                class="t-fn">CNN_features</span><span class="t-white">)</span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/receiver.js') }}"></script>
+</body>
+
+</html>
