@@ -2,4 +2,4 @@ Flask==3.0.3
 Werkzeug==3.0.3
 numpy==1.26.4
 Pillow==10.3.0
-tflite-runtime==2.14.0
+onnxruntime==1.18.1

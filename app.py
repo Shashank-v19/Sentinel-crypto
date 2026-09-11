@@ -3,7 +3,7 @@ import io
 import numpy as np
 from flask import Flask, request, jsonify, render_template
 from PIL import Image
-import tflite_runtime.interpreter as tflite
+import onnxruntime as ort
 from encryption import encrypt_image
 from decryption import decrypt_image
 from metrics import calculate_entropy, npcr, uaci
@@ -17,30 +17,27 @@ UPLOAD_FOLDER = os.path.join(app.root_path, 'static', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # ---------------------------------------------------------------------------
-# TFLite model loading — encoder only (layers 0-5 of autoencoder)
-# Output shape: (1, 8, 8, 64) which we flatten to use as the feature key
+# ONNX Runtime — encoder model (layers 0-5 of the autoencoder)
+# Output shape: (1, 8, 8, 64) → flattened to 4096-dim feature vector
 # ---------------------------------------------------------------------------
-print("Loading TFLite encoder model...")
-_TFLITE_PATH = os.path.join(app.root_path, "models", "model.tflite")
-_interpreter = tflite.Interpreter(model_path=_TFLITE_PATH)
-_interpreter.allocate_tensors()
-_input_details  = _interpreter.get_input_details()
-_output_details = _interpreter.get_output_details()
-print(f"  Input  shape: {_input_details[0]['shape']}")
-print(f"  Output shape: {_output_details[0]['shape']}")
+print("Loading ONNX encoder model...")
+_ONNX_PATH = os.path.join(app.root_path, "models", "encoder.onnx")
+_session = ort.InferenceSession(_ONNX_PATH, providers=["CPUExecutionProvider"])
+_input_name  = _session.get_inputs()[0].name
+_output_name = _session.get_outputs()[0].name
+print(f"  Input  : {_session.get_inputs()[0].shape}")
+print(f"  Output : {_session.get_outputs()[0].shape}")
 print("Model ready.")
 
 
 def run_inference(image_norm_32x32):
     """
-    Run the TFLite encoder and return a flat 1-D float32 feature array.
-    image_norm_32x32: numpy array of shape (32, 32, 3), values in [0, 1].
+    Run ONNX encoder and return a flat 1-D float32 feature array.
+    image_norm_32x32: numpy array shape (32, 32, 3), values in [0, 1].
     """
     input_data = np.expand_dims(image_norm_32x32, axis=0).astype(np.float32)
-    _interpreter.set_tensor(_input_details[0]['index'], input_data)
-    _interpreter.invoke()
-    output = _interpreter.get_tensor(_output_details[0]['index'])[0]  # (8, 8, 64)
-    return output.flatten()  # → 4096-dim feature vector, same contract as original
+    output = _session.run([_output_name], {_input_name: input_data})[0][0]  # (8, 8, 64)
+    return output.flatten()  # → 4096-dim feature vector
 
 
 # ---------------------------------------------------------------------------
@@ -60,7 +57,7 @@ def save_image(numpy_bgr, path):
 
 
 def resize_and_normalise(file_bytes, size=(32, 32)):
-    """Return a (H, W, 3) float32 array in [0,1] for the model input."""
+    """Return a (H, W, 3) float32 array in [0, 1] for model input."""
     pil_img = Image.open(io.BytesIO(file_bytes)).convert("RGB").resize(size)
     return np.array(pil_img, dtype=np.float32) / 255.0
 
@@ -90,7 +87,7 @@ def api_encrypt():
     # Decode original high-resolution image (BGR numpy array)
     image = decode_image(file_bytes)
 
-    # Extract encoder features from 32×32 normalised image
+    # Extract encoder features from 32x32 normalised image
     image_norm = resize_and_normalise(file_bytes)
     features = run_inference(image_norm)  # shape (4096,)
 

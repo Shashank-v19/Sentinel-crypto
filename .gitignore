@@ -44,5 +44,6 @@ Thumbs.db
 logs/
 
 # ── ML Models ────────────────────────────────────────────────────────────────
-# Keep only the lightweight TFLite model; exclude the heavy Keras .h5
+# Keep only the lightweight ONNX encoder; exclude the heavy Keras .h5 and .tflite
 models/autoencoder.h5
+models/model.tflite
