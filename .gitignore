@@ -1,4 +1,4 @@
-# ── Python ──────────────────────────────────────────────────────────────────
+# ── Python ───────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *.pyo
@@ -10,7 +10,7 @@ dist/
 build/
 .eggs/
 
-# ── Virtual environments ─────────────────────────────────────────────────────
+# ── Virtual environments ──────────────────────────────────────────────────────
 venv/
 .venv/
 .venv1/
@@ -18,16 +18,16 @@ env/
 ENV/
 .env
 
-# ── Environment variables ────────────────────────────────────────────────────
+# ── Environment variables ─────────────────────────────────────────────────────
 .env
 .env.local
 .env.*.local
 
-# ── Runtime / generated uploads ──────────────────────────────────────────────
+# ── Runtime / generated uploads ───────────────────────────────────────────────
 static/uploads/*
 !static/uploads/.gitkeep
 
-# ── OS / Editor ──────────────────────────────────────────────────────────────
+# ── OS / Editor ───────────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 .idea/
@@ -35,15 +35,19 @@ Thumbs.db
 *.swp
 *.swo
 
-# ── Jupyter ──────────────────────────────────────────────────────────────────
+# ── Jupyter ───────────────────────────────────────────────────────────────────
 .ipynb_checkpoints/
 *.ipynb
 
-# ── Logs ─────────────────────────────────────────────────────────────────────
+# ── Logs ──────────────────────────────────────────────────────────────────────
 *.log
 logs/
 
-# ── ML Models ────────────────────────────────────────────────────────────────
-# Keep only the lightweight ONNX encoder; exclude the heavy Keras .h5 and .tflite
+# ── ML Models (dev only, not needed on Vercel) ────────────────────────────────
+# Only encoder.onnx is tracked; exclude everything else
 models/autoencoder.h5
 models/model.tflite
+
+# ── Dev scripts (local only) ──────────────────────────────────────────────────
+convert_model.py
+.python-version
